@@ -1,0 +1,9 @@
+node_modules/
+dist/
+
+orbit.db
+orbit.db-shm
+orbit.db-wal
+
+.DS_Store
+Thumbs.db

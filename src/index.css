@@ -1,0 +1,454 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+.overflow-y-auto, .overflow-y-scroll {
+  scrollbar-gutter: stable;
+}
+
+/* PWA window-controls-overlay: make sidebar header draggable as title bar */
+.titlebar-drag {
+  -webkit-app-region: drag;
+  app-region: drag;
+}
+.titlebar-drag button, .titlebar-drag a, .titlebar-drag input, .titlebar-drag kbd {
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+}
+
+input:focus, select:focus, textarea:focus, [contenteditable]:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Light theme */
+:root {
+  --base: #ffffff;
+  --sidebar: #f8f8fa;
+  --surface: #f0f0f3;
+  --elevated: #e8e8ec;
+  --overlay: #e0e0e5;
+  --border-val: rgba(0, 0, 0, 0.08);
+  --border-hover-val: rgba(0, 0, 0, 0.12);
+  --text-primary-val: #1a1a1e;
+  --text-secondary-val: #6b6b76;
+  --text-muted-val: #9898a0;
+  --accent-val: #5E6AD2;
+  --accent-hover-val: #4F5ABF;
+  --accent-muted-val: rgba(94, 106, 210, 0.10);
+  --success-val: #16a34a;
+  --warning-val: #d97706;
+  --danger-val: #dc2626;
+  --wash-val: #000000;
+  --scrollbar-thumb: rgba(0, 0, 0, 0.10);
+  --scrollbar-hover: rgba(0, 0, 0, 0.18);
+  --code-bg: rgba(0, 0, 0, 0.05);
+}
+
+/* Dark theme */
+.dark {
+  --base: #1b1b1f;
+  --sidebar: #141417;
+  --surface: #222228;
+  --elevated: #2a2a30;
+  --overlay: #323238;
+  --border-val: rgba(255, 255, 255, 0.06);
+  --border-hover-val: rgba(255, 255, 255, 0.1);
+  --text-primary-val: #e8e8ec;
+  --text-secondary-val: #9898a0;
+  --text-muted-val: #5c5c66;
+  --accent-val: #5E6AD2;
+  --accent-hover-val: #7078E8;
+  --accent-muted-val: rgba(94, 106, 210, 0.15);
+  --success-val: #3CCB7F;
+  --warning-val: #F5A524;
+  --danger-val: #EF4444;
+  --wash-val: #ffffff;
+  --scrollbar-thumb: rgba(255, 255, 255, 0.08);
+  --scrollbar-hover: rgba(255, 255, 255, 0.14);
+  --code-bg: rgba(255, 255, 255, 0.06);
+}
+
+/* Register colors as Tailwind utilities */
+@theme inline {
+  --color-base: var(--base);
+  --color-sidebar: var(--sidebar);
+  --color-surface: var(--surface);
+  --color-elevated: var(--elevated);
+  --color-overlay: var(--overlay);
+  --color-border: var(--border-val);
+  --color-border-hover: var(--border-hover-val);
+  --color-text-primary: var(--text-primary-val);
+  --color-text-secondary: var(--text-secondary-val);
+  --color-text-muted: var(--text-muted-val);
+  --color-accent: var(--accent-val);
+  --color-accent-hover: var(--accent-hover-val);
+  --color-accent-muted: var(--accent-muted-val);
+  --color-success: var(--success-val);
+  --color-warning: var(--warning-val);
+  --color-danger: var(--danger-val);
+  --color-wash: var(--wash-val);
+}
+
+/* Static theme values */
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+html, body { overflow-x: hidden; max-width: 100vw; }
+body {
+  margin: 0;
+  background-color: var(--base);
+  color: var(--text-primary-val);
+  font-family: var(--font-sans);
+  font-feature-settings: 'calt' 1, 'cv05' 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+input, textarea, select, button { font-family: inherit; }
+#root { min-height: 100vh; }
+
+/* PWA window-controls-overlay: app draws into title bar */
+@media (display-mode: window-controls-overlay) {
+  .titlebar-drag { -webkit-app-region: drag; }
+  .titlebar-drag button, .titlebar-drag a, .titlebar-drag input { -webkit-app-region: no-drag; }
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-hover); }
+
+/* Tiptap editor */
+.prose-notes {
+  font-size: 13px;
+  line-height: 1.625;
+  color: var(--text-secondary-val);
+}
+.prose-notes:focus { color: var(--text-primary-val); }
+.prose-notes p { margin: 0.15em 0; }
+.prose-notes h1 { font-size: 18px; font-weight: 700; color: var(--text-primary-val); margin: 0.75em 0 0.25em; }
+.prose-notes h2 { font-size: 15px; font-weight: 600; color: var(--text-primary-val); margin: 0.75em 0 0.25em; }
+.prose-notes h3 { font-size: 14px; font-weight: 600; color: var(--text-primary-val); margin: 0.5em 0 0.15em; }
+.prose-notes strong { font-weight: 600; color: var(--text-primary-val); }
+.prose-notes em { font-style: italic; }
+.prose-notes code { font-family: var(--font-mono); font-size: 12px; background: var(--code-bg); padding: 1px 4px; border-radius: 3px; }
+.prose-notes ul { list-style: disc; padding-left: 1.25em; margin: 0.15em 0; }
+/* Task list — checkbox items */
+.prose-notes ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 1.25em;
+  margin: 0.15em 0;
+}
+.prose-notes ul[data-type="taskList"] > li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4em;
+  margin: 0.1em 0;
+}
+.prose-notes ul[data-type="taskList"] > li > label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4em;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.prose-notes ul[data-type="taskList"] > li > div {
+  flex: 1;
+  min-width: 0;
+}
+.prose-notes ul[data-type="taskList"] input[type="checkbox"] {
+  appearance: none;
+  width: 14px; height: 14px;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  border-radius: 3px;
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s;
+  position: relative;
+  margin-top: 4px;
+}
+.prose-notes ul[data-type="taskList"] input[type="checkbox"]:hover {
+  border-color: rgba(255,255,255,0.4);
+}
+.prose-notes ul[data-type="taskList"] input[type="checkbox"]:checked {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.3);
+}
+.prose-notes ul[data-type="taskList"] input[type="checkbox"]:checked::after {
+  content: '\2713';
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: rgba(255,255,255,0.6); font-weight: bold;
+}
+.prose-notes ul[data-type="taskList"] li[data-checked="true"] > div > p {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+.prose-notes li { margin: 0.1em 0; }
+.prose-notes p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--text-muted-val);
+  opacity: 0.4;
+  pointer-events: none;
+  float: left;
+  height: 0;
+}
+
+/* Notes view — full-size editor */
+.notes-editor-full .prose-notes {
+  font-size: 14px;
+  line-height: 1.75;
+  min-height: 400px;
+}
+.notes-editor-full .prose-notes h1 { font-size: 22px; }
+.notes-editor-full .prose-notes h2 { font-size: 17px; }
+.notes-editor-full .prose-notes h3 { font-size: 15px; }
+
+/* Tag badges — inline tag elements in editor */
+.tag-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  padding: 1px 6px 2px;
+  border-radius: 4px;
+  margin: 0 1px;
+  vertical-align: baseline;
+  white-space: nowrap;
+  user-select: none;
+  background: color-mix(in srgb, var(--tag-color, #9898a0) 15%, transparent);
+  color: var(--tag-color, #9898a0);
+  border: 1px solid color-mix(in srgb, var(--tag-color, #9898a0) 25%, transparent);
+}
+.tag-badge:hover {
+  background: color-mix(in srgb, var(--tag-color, #9898a0) 22%, transparent);
+}
+
+/* Active suggestion highlight */
+.tag-suggestion-active {
+  color: var(--accent-val);
+}
+
+/* ─── Entity Blocks ────────────────────────────────────────────── */
+
+.entity-block {
+  padding: 4px 0;
+  margin: 2px 0;
+  border-radius: 6px;
+  transition: background-color 0.15s;
+}
+.entity-block:hover {
+  background: var(--wash-val, #000);
+  background: color-mix(in srgb, var(--wash-val) 2%, transparent);
+}
+
+/* Main row layout */
+.entity-block__main {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* Content area — takes remaining space */
+.entity-block__content {
+  flex: 1;
+  min-width: 0;
+  margin: 0 !important;
+}
+
+/* Done state */
+.entity-block--done .entity-block__content,
+.entity-text--done {
+  text-decoration: line-through;
+  color: var(--text-muted-val) !important;
+}
+
+/* Checkbox button */
+.entity-block__checkbox {
+  flex-shrink: 0;
+  margin-top: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 0;
+  transition: color 0.15s, opacity 0.15s;
+}
+.entity-block__checkbox:hover {
+  opacity: 0.8;
+}
+.entity-checkbox--done { color: var(--text-muted-val); }
+.entity-checkbox--p1 { color: var(--danger-val); }
+.entity-checkbox--p2 { color: var(--warning-val); }
+.entity-checkbox--p3 { color: var(--accent-val); }
+.entity-checkbox--default { color: var(--text-muted-val); }
+.entity-checkbox--default:hover { color: var(--accent-val); }
+
+/* Entity icons */
+.entity-block__icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+}
+.entity-block__icon--meeting { color: var(--warning-val); }
+.entity-block__icon--project { color: var(--danger-val); }
+
+/* Expand/collapse button */
+.entity-block__expand {
+  flex-shrink: 0;
+  margin-top: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 2px;
+  border-radius: 3px;
+  color: var(--text-muted-val);
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s, background-color 0.15s;
+}
+.entity-block:hover .entity-block__expand,
+.entity-block__expand--active {
+  opacity: 1;
+}
+.entity-block__expand:hover {
+  color: var(--text-secondary-val);
+  background: color-mix(in srgb, var(--wash-val) 4%, transparent);
+}
+
+/* Properties panel */
+.entity-properties {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  margin-left: 24px;
+  padding: 6px 8px;
+  border-left: 2px solid color-mix(in srgb, var(--accent-val) 30%, transparent);
+  background: color-mix(in srgb, var(--wash-val) 2%, transparent);
+  border-radius: 0 4px 4px 0;
+}
+
+/* Task entity — properties border color matches tag */
+.entity-block--task .entity-properties {
+  border-left-color: color-mix(in srgb, var(--success-val) 40%, transparent);
+}
+.entity-block--meeting .entity-properties {
+  border-left-color: color-mix(in srgb, var(--warning-val) 40%, transparent);
+}
+.entity-block--project .entity-properties {
+  border-left-color: color-mix(in srgb, var(--danger-val) 40%, transparent);
+}
+
+/* Property pills */
+.entity-prop-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid var(--border-val);
+  background: color-mix(in srgb, var(--wash-val) 3%, transparent);
+  color: var(--text-muted-val);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+.entity-prop-pill:hover {
+  background: color-mix(in srgb, var(--wash-val) 5%, transparent);
+  color: var(--text-secondary-val);
+}
+.entity-prop-pill--p1 {
+  background: color-mix(in srgb, var(--danger-val) 10%, transparent);
+  color: var(--danger-val);
+  border-color: color-mix(in srgb, var(--danger-val) 20%, transparent);
+}
+.entity-prop-pill--p2 {
+  background: color-mix(in srgb, var(--warning-val) 10%, transparent);
+  color: var(--warning-val);
+  border-color: color-mix(in srgb, var(--warning-val) 20%, transparent);
+}
+.entity-prop-pill--p3 {
+  background: color-mix(in srgb, var(--accent-val) 10%, transparent);
+  color: var(--accent-val);
+  border-color: color-mix(in srgb, var(--accent-val) 20%, transparent);
+}
+.entity-prop-pill--date {
+  background: color-mix(in srgb, var(--accent-val) 10%, transparent);
+  color: var(--accent-val);
+  border-color: color-mix(in srgb, var(--accent-val) 20%, transparent);
+}
+.entity-prop-pill--overdue {
+  background: color-mix(in srgb, var(--danger-val) 10%, transparent);
+  color: var(--danger-val);
+  border-color: color-mix(in srgb, var(--danger-val) 20%, transparent);
+}
+.entity-prop-pill--status-active {
+  background: color-mix(in srgb, var(--success-val) 10%, transparent);
+  color: var(--success-val);
+  border-color: color-mix(in srgb, var(--success-val) 20%, transparent);
+}
+.entity-prop-pill--status-someday {
+  background: color-mix(in srgb, var(--warning-val) 10%, transparent);
+  color: var(--warning-val);
+  border-color: color-mix(in srgb, var(--warning-val) 20%, transparent);
+}
+.entity-prop-pill--status-done {
+  background: color-mix(in srgb, var(--text-muted-val) 10%, transparent);
+  color: var(--text-muted-val);
+  border-color: color-mix(in srgb, var(--text-muted-val) 20%, transparent);
+}
+
+/* Prop button style (used in React EntityBlock) */
+.entity-prop-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+.entity-prop-btn:hover {
+  filter: brightness(1.1);
+}
+
+/* Excalidraw CSS containment -- prevent Excalidraw styles from leaking */
+.excalidraw-container {
+  isolation: isolate;
+}
+body.dark,
+.dark body,
+html.dark body {
+  background-color: var(--base) !important;
+  color: var(--text-primary-val) !important;
+}
+
+::selection {
+  background: var(--accent-muted-val);
+  color: var(--text-primary-val);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-val);
+  outline-offset: 2px;
+  border-radius: 4px;
+}

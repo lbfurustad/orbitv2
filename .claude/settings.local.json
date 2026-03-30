@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:youtubetranscript.com)",
+      "WebFetch(domain:lunanotes.io)",
+      "Bash(wc -l /c/Users/lasse/dev/personal/brain-tasks-vscode/src/core/*.ts /c/Users/lasse/dev/personal/brain-tasks-vscode/webview/src/components/*/*.tsx)",
+      "WebFetch(domain:noembed.com)",
+      "Bash(cp:*)",
+      "Bash(uv run:*)",
+      "Bash(where uv:*)",
+      "Bash(uv --version)"
+    ]
+  }
+}
