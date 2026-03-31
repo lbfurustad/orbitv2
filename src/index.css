@@ -431,6 +431,29 @@ input, textarea, select, button { font-family: inherit; }
   filter: brightness(1.1);
 }
 
+/* ─── React Flow Canvas ───────────────────────────────────────── */
+.react-flow__controls button {
+  background: var(--surface) !important;
+  border-color: var(--border-val) !important;
+  color: var(--text-secondary-val) !important;
+  fill: var(--text-secondary-val) !important;
+}
+.react-flow__controls button:hover {
+  background: var(--elevated) !important;
+  color: var(--text-primary-val) !important;
+  fill: var(--text-primary-val) !important;
+}
+.react-flow__edge {
+  cursor: pointer;
+}
+.react-flow__edge:hover .react-flow__edge-path {
+  stroke-opacity: 0.8 !important;
+  stroke-width: 2 !important;
+}
+.react-flow__minimap {
+  border: 1px solid var(--border-val) !important;
+}
+
 /* Excalidraw CSS containment -- prevent Excalidraw styles from leaking */
 .excalidraw-container {
   isolation: isolate;

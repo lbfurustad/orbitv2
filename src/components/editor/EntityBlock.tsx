@@ -570,7 +570,10 @@ function getPresets(): { label: string; date: string }[] {
 function fmtDate(dateStr: string): string {
   const d = new Date(dateStr + 'T12:00:00')
   const now = new Date()
-  const diff = Math.floor((d.getTime() - now.getTime()) / 86400000)
+  // Compare dates only (strip time) to get correct day diff
+  const dDate = new Date(d.getFullYear(), d.getMonth(), d.getDate())
+  const nDate = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+  const diff = Math.round((dDate.getTime() - nDate.getTime()) / 86400000)
   if (diff === 0) return 'I dag'
   if (diff === 1) return 'I morgen'
   if (diff === -1) return 'I går'

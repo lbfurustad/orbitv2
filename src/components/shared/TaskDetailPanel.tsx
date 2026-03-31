@@ -547,7 +547,7 @@ function InlineDatePicker({ current, onPick, children, presets: customPresets }:
           {/* Quick picks */}
           <div className="space-y-0.5 mb-3 pb-3 border-b border-border">
             {presets.map(p => (
-              <button key={p.label} onClick={() => pick(p.date)}
+              <button key={p.label} onMouseDown={(e) => { e.preventDefault(); e.stopPropagation() }} onClick={(e) => { e.stopPropagation(); pick(p.date) }}
                 className={`flex items-center justify-between w-full px-2 py-1 rounded text-[12px] hover:bg-wash/[0.06] ${current === p.date ? 'text-accent' : 'text-text-secondary'}`}>
                 <span>{p.label}</span>
                 <span className="text-[10px] text-text-muted font-mono tabular-nums">{p.date.slice(5)}</span>
@@ -572,7 +572,7 @@ function InlineDatePicker({ current, onPick, children, presets: customPresets }:
           <div className="grid grid-cols-7 gap-y-0.5">
             {cells.map(cell => (
               <div key={cell.date} className="flex justify-center">
-                <button onClick={() => pick(cell.date)}
+                <button onMouseDown={(e) => { e.preventDefault(); e.stopPropagation() }} onClick={(e) => { e.stopPropagation(); pick(cell.date) }}
                   className={`w-[28px] h-[24px] rounded text-[11px] tabular-nums transition-colors ${
                     cell.date === current ? 'bg-accent text-white font-medium'
                       : cell.date === todayStr ? 'ring-1 ring-accent/40 text-text-primary'
@@ -586,7 +586,7 @@ function InlineDatePicker({ current, onPick, children, presets: customPresets }:
           </div>
 
           {current && (
-            <button onClick={() => pick(null)} className="w-full mt-2 pt-2 border-t border-border text-[11px] text-text-muted hover:text-text-secondary text-center">
+            <button onMouseDown={(e) => { e.preventDefault(); e.stopPropagation() }} onClick={(e) => { e.stopPropagation(); pick(null) }} className="w-full mt-2 pt-2 border-t border-border text-[11px] text-text-muted hover:text-text-secondary text-center">
               Fjern dato
             </button>
           )}

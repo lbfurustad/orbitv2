@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo, lazy, Suspense } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { SquaresFour, List, Kanban, Plus } from '@phosphor-icons/react'
+import { SquaresFour, List, Kanban, Plus, Graph } from '@phosphor-icons/react'
 import { api } from '../../lib/api'
 import { useQuery } from '../../lib/hooks/useQuery'
 import { ProjectList } from './ProjectList'
@@ -9,6 +9,8 @@ import { ProjectBoard } from './ProjectBoard'
 import { ProjectDetail } from './ProjectDetail'
 import { CreateProjectDialog } from './CreateProjectDialog'
 import type { ProjectWithCounts, ProjectViewMode } from '../../lib/types'
+
+const ProjectCanvas = lazy(() => import('./canvas/ProjectCanvas'))
 
 const SCOPE_FILTERS = [
   { id: 'all' as const, label: 'Alle' },
@@ -20,11 +22,12 @@ const VIEW_MODES: { id: ProjectViewMode; icon: typeof List }[] = [
   { id: 'list', icon: List },
   { id: 'grid', icon: SquaresFour },
   { id: 'board', icon: Kanban },
+  { id: 'canvas', icon: Graph },
 ]
 
 function getStoredViewMode(): ProjectViewMode {
   const stored = localStorage.getItem('orbit-projects-view')
-  if (stored === 'list' || stored === 'grid' || stored === 'board') return stored
+  if (stored === 'list' || stored === 'grid' || stored === 'board' || stored === 'canvas') return stored
   return 'list'
 }
 
@@ -136,25 +139,50 @@ export function ProjectsView() {
       </div>
 
       {/* Content */}
-      <div className="px-6 pb-6">
-        {viewMode === 'list' && (
-          <ProjectList projects={list} onSelect={handleSelect} onRefetch={refetch} />
-        )}
-        {viewMode === 'grid' && (
-          <ProjectGrid projects={list} onSelect={handleSelect} onRefetch={refetch} />
-        )}
-        {viewMode === 'board' && (
-          <ProjectBoard
-            projects={list}
-            onSelect={handleSelect}
-            onStatusChange={handleStatusChange}
-            onRefetch={refetch}
-          />
-        )}
-      </div>
+      {viewMode === 'canvas' ? (
+        selectedProjectId ? (
+          <Suspense fallback={<div className="flex items-center justify-center h-[60vh] text-text-muted text-[13px]">Laster canvas...</div>}>
+            <ProjectCanvas projectId={selectedProjectId} />
+          </Suspense>
+        ) : (
+          <div className="flex flex-col items-center justify-center h-[50vh] text-center">
+            <Graph size={32} className="text-accent mb-3 opacity-40" />
+            <p className="text-text-secondary text-[14px] font-medium">Velg et prosjekt</p>
+            <p className="text-text-muted text-[12px] mt-1">Klikk på et prosjekt i listen for å se canvas-visningen</p>
+            <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-2 max-w-md">
+              {list.filter(p => p.status === 'active').slice(0, 6).map(p => (
+                <button
+                  key={p.id}
+                  onClick={() => handleSelect(p)}
+                  className="px-3 py-2 bg-surface rounded-lg border border-border hover:border-border-hover text-[12px] text-text-secondary truncate transition-colors"
+                >
+                  {p.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        )
+      ) : (
+        <div className="px-6 pb-6">
+          {viewMode === 'list' && (
+            <ProjectList projects={list} onSelect={handleSelect} onRefetch={refetch} />
+          )}
+          {viewMode === 'grid' && (
+            <ProjectGrid projects={list} onSelect={handleSelect} onRefetch={refetch} />
+          )}
+          {viewMode === 'board' && (
+            <ProjectBoard
+              projects={list}
+              onSelect={handleSelect}
+              onStatusChange={handleStatusChange}
+              onRefetch={refetch}
+            />
+          )}
+        </div>
+      )}
 
-      {/* Detail slide-over */}
-      {selectedProjectId && (
+      {/* Detail slide-over (not shown in canvas mode) */}
+      {selectedProjectId && viewMode !== 'canvas' && (
         <ProjectDetail
           projectId={selectedProjectId}
           onClose={handleCloseDetail}

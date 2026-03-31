@@ -13,7 +13,7 @@ function timeAgo(dateStr: string): string {
   if (diff < 3600) return `${Math.floor(diff / 60)} min siden`
   if (diff < 86400) return `${Math.floor(diff / 3600)}t siden`
   const days = Math.floor(diff / 86400)
-  if (days === 1) return 'i gar'
+  if (days === 1) return 'i g\u00e5r'
   if (days < 7) return `${days} dager siden`
   return d.toLocaleDateString('nb-NO', { day: 'numeric', month: 'short' })
 }

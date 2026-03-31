@@ -106,7 +106,7 @@ export function ProjectCard({ project, onClick, variant = 'grid', tasks }: Proje
               <span className="text-[12px] text-text-secondary truncate flex-1 min-w-0">
                 {task.text}
               </span>
-              {task.priority && task.priority <= 2 && (
+              {!!task.priority && task.priority <= 2 && (
                 <span className={`text-[9px] font-semibold px-1 rounded shrink-0 ${PRIORITY_BG[task.priority]}`}>
                   P{task.priority}
                 </span>

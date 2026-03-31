@@ -112,8 +112,16 @@ class EntityNodeView {
       this.expandBtn.classList.add('entity-block__expand')
       this.expandBtn.contentEditable = 'false'
       this.expandBtn.setAttribute('type', 'button')
+      this.expandBtn.tabIndex = -1
       this.updateExpandIcon()
-      // Use both mousedown and click to ensure ProseMirror doesn't swallow the event
+      // Use pointerdown (like checkbox) to ensure ProseMirror doesn't swallow the event
+      this.expandBtn.addEventListener('pointerdown', (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        e.stopImmediatePropagation()
+        this.pointerToggleHandledAt = Date.now()
+        this.toggleExpand()
+      })
       this.expandBtn.addEventListener('mousedown', (e) => {
         e.preventDefault()
         e.stopPropagation()
@@ -123,6 +131,8 @@ class EntityNodeView {
         e.preventDefault()
         e.stopPropagation()
         e.stopImmediatePropagation()
+        // Only toggle if pointerdown didn't already handle it
+        if (Date.now() - this.pointerToggleHandledAt < 250) return
         this.toggleExpand()
       })
       mainRow.appendChild(this.expandBtn)
@@ -403,7 +413,10 @@ class EntityNodeView {
   private formatDate(dateStr: string): string {
     const d = new Date(dateStr + 'T12:00:00')
     const now = new Date()
-    const diff = Math.floor((d.getTime() - now.getTime()) / 86400000)
+    // Compare dates only (strip time) to get correct day diff
+    const dDate = new Date(d.getFullYear(), d.getMonth(), d.getDate())
+    const nDate = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    const diff = Math.round((dDate.getTime() - nDate.getTime()) / 86400000)
     if (diff === 0) return 'I dag'
     if (diff === 1) return 'I morgen'
     if (diff === -1) return 'I går'
@@ -418,7 +431,12 @@ class EntityNodeView {
   stopEvent(event: Event): boolean {
     const target = event.target as HTMLElement | null
     if (!target) return false
-    return Boolean(target.closest('button, input, select'))
+    // Check if target is inside a button, input, select, or the properties panel
+    return Boolean(
+      target.closest('button, input, select') ||
+      target.closest('.entity-properties') ||
+      target.closest('.entity-block__expand')
+    )
   }
 }
 

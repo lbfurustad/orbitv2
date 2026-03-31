@@ -59,7 +59,7 @@ export interface ProjectWithCounts extends Project {
   task_count_done: number
 }
 
-export type ProjectViewMode = 'list' | 'grid' | 'board'
+export type ProjectViewMode = 'list' | 'grid' | 'board' | 'canvas'
 
 export interface Document {
   id: string
@@ -179,4 +179,17 @@ export interface DailyData {
     content: string | null
     banner_url: string | null
   } | null
+}
+
+export interface ProjectGraph {
+  project: ProjectWithCounts
+  tasks: Task[]
+  meetings: Meeting[]
+  people: Person[]
+  whiteboards: any[]
+}
+
+export interface UnconnectedEntities {
+  tasks: Task[]
+  meetings: Meeting[]
 }

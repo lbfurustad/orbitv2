@@ -1,4 +1,4 @@
-import type { Task, Document, DailyData, Tag, Project, ProjectWithCounts, Person, Whiteboard } from './types'
+import type { Task, Document, DailyData, Tag, Project, ProjectWithCounts, Person, Whiteboard, Meeting, ProjectGraph, UnconnectedEntities } from './types'
 
 function cleanParams(params?: Record<string, string | undefined>): string {
   if (!params) return ''
@@ -162,6 +162,18 @@ export const api = {
 
   deleteProject: (id: string) =>
     fetchJson<void>(`/projects/${id}`, { method: 'DELETE' }),
+
+  projectGraph: (id: string) =>
+    fetchJson<ProjectGraph>(`/projects/${id}/graph`),
+
+  unconnected: () =>
+    fetchJson<UnconnectedEntities>(`/projects/unconnected`),
+
+  updateMeeting: (id: string, data: Record<string, unknown>) =>
+    fetchJson<Meeting>(`/meetings/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    }),
 
   // People
   people: () =>

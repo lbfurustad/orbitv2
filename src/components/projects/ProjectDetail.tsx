@@ -214,7 +214,7 @@ export function ProjectDetail({ projectId, onClose, onRefetch }: ProjectDetailPr
                             {PRIORITY_LABELS[p]}
                           </button>
                         ))}
-                        {project.priority && (
+                        {!!project.priority && (
                           <>
                             <div className="border-t border-border my-1" />
                             <button

@@ -44,6 +44,86 @@ projectsRouter.get('/', (req, res) => {
   }
 })
 
+// GET /api/projects/unconnected — entities not connected to any project
+projectsRouter.get('/unconnected', (req, res) => {
+  try {
+    const db = getDb()
+    const tasks = db.prepare(`
+      SELECT t.*, p.name as project_name
+      FROM tasks t
+      LEFT JOIN projects p ON t.project_id = p.id
+      WHERE t.project_id IS NULL AND t.done = 0
+      ORDER BY t.created_at DESC
+    `).all()
+
+    const meetings = db.prepare(`
+      SELECT * FROM meetings
+      WHERE project_id IS NULL
+      ORDER BY date DESC
+    `).all()
+
+    res.json({ tasks, meetings })
+  } catch (err) {
+    console.log('[projects] GET /unconnected error:', err)
+    res.status(500).json({ error: 'Failed to fetch unconnected entities' })
+  }
+})
+
+// GET /api/projects/:id/graph — full project graph with all related entities
+projectsRouter.get('/:id/graph', (req, res) => {
+  try {
+    const db = getDb()
+    const { id } = req.params
+
+    // Project with task counts
+    const project = db.prepare(`
+      SELECT p.*,
+        COUNT(t.id) as task_count_total,
+        SUM(CASE WHEN t.done = 1 THEN 1 ELSE 0 END) as task_count_done
+      FROM projects p
+      LEFT JOIN tasks t ON t.project_id = p.id
+      WHERE p.id = ?
+      GROUP BY p.id
+    `).get(id)
+
+    if (!project) {
+      res.status(404).json({ error: 'Project not found' })
+      return
+    }
+
+    // Tasks linked to this project
+    const tasks = db.prepare(`
+      SELECT * FROM tasks WHERE project_id = ? ORDER BY done ASC, sort_order ASC
+    `).all(id)
+
+    // Meetings linked to this project
+    const meetings = db.prepare(`
+      SELECT * FROM meetings WHERE project_id = ? ORDER BY date DESC
+    `).all(id)
+
+    // People (indirectly linked via tasks and meeting participants)
+    const people = db.prepare(`
+      SELECT DISTINCT pe.* FROM people pe WHERE pe.id IN (
+        SELECT person_id FROM tasks WHERE project_id = ? AND person_id IS NOT NULL
+        UNION
+        SELECT mp.person_id FROM meeting_participants mp
+          JOIN meetings m ON mp.meeting_id = m.id
+          WHERE m.project_id = ? AND mp.person_id IS NOT NULL
+      )
+    `).all(id, id)
+
+    // Whiteboards linked to this project
+    const whiteboards = db.prepare(`
+      SELECT * FROM whiteboards WHERE project_id = ? ORDER BY updated_at DESC
+    `).all(id)
+
+    res.json({ project, tasks, meetings, people, whiteboards })
+  } catch (err) {
+    console.log('[projects] GET /:id/graph error:', err)
+    res.status(500).json({ error: 'Failed to fetch project graph' })
+  }
+})
+
 // GET /api/projects/:id — single project with task counts
 projectsRouter.get('/:id', (req, res) => {
   try {
