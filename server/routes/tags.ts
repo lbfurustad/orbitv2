@@ -24,8 +24,8 @@ function seedDefaultTags() {
   }
 }
 
-// Seed on import
-seedDefaultTags()
+// Exported so it can be called after initDb()
+export { seedDefaultTags }
 
 // GET /api/tags — list all tags
 tagsRouter.get('/', (_req, res) => {

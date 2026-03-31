@@ -5,7 +5,7 @@ import { todayRouter } from './routes/today.js'
 import { tasksRouter } from './routes/tasks.js'
 import { documentsRouter } from './routes/documents.js'
 import { eventsRouter } from './routes/events.js'
-import { tagsRouter } from './routes/tags.js'
+import { tagsRouter, seedDefaultTags } from './routes/tags.js'
 import { blocksRouter } from './routes/blocks.js'
 import { projectsRouter } from './routes/projects.js'
 import { peopleRouter } from './routes/people.js'
@@ -20,6 +20,7 @@ app.use(express.json({ limit: '50mb' }))
 
 // Initialize database and run migrations
 initDb()
+seedDefaultTags()
 
 // Routes
 app.use('/api/today', todayRouter)
